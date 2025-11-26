@@ -61,7 +61,7 @@ static void MPU_Config(void);
 
 uint8_t debug = 0;
 int8_t spin_speed = -100;
-uint8_t htim_num = -1;
+uint8_t htim_num = 0;
 extern jgb37_520_motor_t motor[4];
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
