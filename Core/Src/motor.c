@@ -382,9 +382,7 @@ void JGB37_520_motor_get(jgb37_520_motor_t* motor){
     return;
   }
   //防止同时读取
-  motor->current_time = HAL_GetTick();
-  uint32_t delta_time = motor->current_time - motor->last_time ;  
-  if ( delta_time <= 50 ){
+  if ( HAL_GetTick() - motor->last_time < 50 ){
     return ;
   }//防止过短时间内执行多次读取函数
   motor->encoding = 1;
@@ -392,8 +390,9 @@ void JGB37_520_motor_get(jgb37_520_motor_t* motor){
   motor->last_count = motor->current_count;
   motor->current_count = __HAL_TIM_GET_COUNTER(motor->enc_tim);
 
+  motor->current_time = HAL_GetTick();
+  motor->delta_time = motor->current_time - motor->last_time;
   motor->last_time = motor->current_time;
-  motor->delta_time = delta_time;
 
   int32_t diff = motor->current_count - motor->last_count;
   if (diff > 32768){
